@@ -25,14 +25,33 @@ protected:
 	}
 };
 
-TEST_F(test_Empty, TestEmptyFunc1){
+//Vector generation is random on each call so we can only test size
+//to ensure vector gen function works
+TEST_F(test_Empty, TestRandomVectorGenerator){
     Empty myobj;
-    
-    ASSERT_EQ(2, myobj.EmptyFunc());
+	myobj.generateRandomVectors();
+
+    ASSERT_EQ(15, myobj.getVecSize());
 }
 
-TEST_F(test_Empty, TestEmptyFunc2){
+TEST_F(test_Empty, TestFeatVectorParse){
     Empty myobj;
+	vector<vector<double>> vec;
+	vec = myobj.parseFeatureVectors();
+
     
-    ASSERT_EQ(3, myobj.EmptyFunc());
+    ASSERT_EQ(15, vec.size());
+}
+
+TEST_F(test_Empty, TestFeatVectorProjection){
+    Empty myobj;
+	vector<vector<int>> vec;
+	cout<< "Generating Random Vectors..." <<endl;
+	
+	myobj.generateRandomVectors();
+	cout<<"projecting.."<<endl;
+	vec = myobj.randomProjection();
+
+    
+    ASSERT_EQ(15, vec.size());
 }
