@@ -13,7 +13,7 @@ Already when looking at the python feature vectors we can see results I did not 
 
 To understand how this was done here let's take a look at the `SongDict` class - this was used to be the hash table structure that held our feature vectors and the respective songs. 
 
-```
+```C++
 class SongDict{
 public:
   SongDict();
@@ -61,8 +61,11 @@ Currently the main app runs through unit tests. They test out the success of fun
 
 The functions themselves are very wordy and will print out what they're doing and share the feature vectors at each step. Running 
 
-`cmake ..`
-`make`
+```
+cmake ..
+make
+```
+
 from inside the `/build/` directory will create the `run_tests` C++ executable in `/build/`.
 
 exectute `./run_tests` when in the `/build/` directory to see the application in action and get the feature matrices and projected feature matrix.
