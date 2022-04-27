@@ -1,14 +1,36 @@
-#include "Empty.h"
+#include "SongDict.h"
 
-Empty::Empty(){
+SongDict::SongDict(){
     
 }
 
-Empty::~Empty(){
+SongDict::~SongDict(){
     
 }
 
-vector<vector<int>> Empty::randomProjection(){
+void SongDict::createSongMap(){
+    vector<vector<int>> keys = randomProjection();
+    vector<vector<string>> names = parseNameVectors();
+
+    cout<<"BEGINNING MAP FILL"<<endl;
+    for(int i = 0; i < keys.size(); i++){
+        pair<map<vector<int>,vector<string>>::iterator,bool> ret = song_dict.insert({keys[i],names[i]});
+        if(ret.second == false){
+            vector<string> current = song_dict.at(keys[i]);
+            current.push_back(names[i][0]);
+            song_dict.at(keys[i]) = current;
+        }
+
+    }
+
+    cout << "song_dict contains:\n";
+    for(string i: song_dict.at(keys[0])){
+        cout<< i << " | " << endl;
+    }
+
+}
+
+vector<vector<int>> SongDict::randomProjection(){
 
     vector<vector<int>> projected_vectors;
     vector<vector<double>> feature_vecs = parseFeatureVectors();
@@ -53,7 +75,7 @@ vector<vector<int>> Empty::randomProjection(){
 
 }
 
-double Empty::dot_product(vector<double> feature_vec, vector<double> random_vector){
+double SongDict::dot_product(vector<double> feature_vec, vector<double> random_vector){
     double product;
     for(unsigned int i = 0; i < feature_vec.size(); i++){
         product = product + (feature_vec[i] * random_vector[i]);
@@ -62,7 +84,7 @@ double Empty::dot_product(vector<double> feature_vec, vector<double> random_vect
     return product;
 }
 
-vector<vector<double>> Empty::parseFeatureVectors(){
+vector<vector<double>> SongDict::parseFeatureVectors(){
     vector<vector<double>> ret;
     ifstream  data("../python/music_processing/exports/song_feats.csv");
     string line;
@@ -87,20 +109,45 @@ vector<vector<double>> Empty::parseFeatureVectors(){
 
 }
 
+vector<vector<string>> SongDict::parseNameVectors(){
+    vector<vector<string>> ret;
+    ifstream  data("../python/music_processing/exports/song_names.csv");
+    string line;
 
-unsigned int Empty::getVecSize(){
+    getline(data,line);
+
+    while(getline(data,line))
+    {
+        stringstream lineStream(line);
+        string cell;
+        vector<string> parsedRow;
+        while(getline(lineStream,cell,','))
+        {
+            //cout<<cell<<endl;
+            parsedRow.push_back(cell);
+        }
+
+        ret.push_back(parsedRow);
+    }
+
+    return ret;
+
+}
+
+map<vector<int>,vector<string>> SongDict::GetSongDict(){
+    return song_dict;
+}
+
+
+unsigned int SongDict::getVecSize(){
     return random_vec.size();
 }
 
-void Empty::generateRandomVectors(){
+void SongDict::generateRandomVectors(){
     
     default_random_engine generator;
     normal_distribution<double> d1(0.0,10.0);
 
-  
-    // Elements to insert in column
-    int num = 10;
-  
     // Inserting elements into vector
     for (int i = 0; i < ROW; i++) {
         // Vector to store column elements

@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include "../code/Empty.h"
+#include "../code/SongDict.h"
 
 #include <iostream>
 #include <string>
 
 using namespace std;
 
-class test_Empty : public ::testing::Test {
+class test_SongDict : public ::testing::Test {
 protected:
 	// This function runs only once before any TEST_F function
 	static void SetUpTestCase(){
@@ -27,15 +27,15 @@ protected:
 
 //Vector generation is random on each call so we can only test size
 //to ensure vector gen function works
-TEST_F(test_Empty, TestRandomVectorGenerator){
-    Empty myobj;
+TEST_F(test_SongDict, TestRandomVectorGenerator){
+    SongDict myobj;
 	myobj.generateRandomVectors();
 
     ASSERT_EQ(15, myobj.getVecSize());
 }
 
-TEST_F(test_Empty, TestFeatVectorParse){
-    Empty myobj;
+TEST_F(test_SongDict, TestFeatVectorParse){
+    SongDict myobj;
 	vector<vector<double>> vec;
 	vec = myobj.parseFeatureVectors();
 
@@ -43,8 +43,8 @@ TEST_F(test_Empty, TestFeatVectorParse){
     ASSERT_EQ(15, vec.size());
 }
 
-TEST_F(test_Empty, TestFeatVectorProjection){
-    Empty myobj;
+TEST_F(test_SongDict, TestFeatVectorProjection){
+    SongDict myobj;
 	vector<vector<int>> vec;
 	cout<< "Generating Random Vectors..." <<endl;
 	
@@ -55,3 +55,19 @@ TEST_F(test_Empty, TestFeatVectorProjection){
     
     ASSERT_EQ(15, vec.size());
 }
+
+TEST_F(test_SongDict, TestFeatSongDictionaryCreation){
+    SongDict myobj;
+	cout<< "Generating Random Vectors..." <<endl;
+	
+	myobj.generateRandomVectors();
+	vector<vector<int>> keys = myobj.randomProjection();
+	cout<<"projecting.."<<endl;
+	myobj.createSongMap();
+	map<vector<int>,vector<string>> dict = myobj.GetSongDict();
+	vector<string> first_row = dict.at(keys[0]);
+
+    
+    ASSERT_EQ("Independent Music Licensing Collective (IMLC) - Hot Sand.mp3", first_row[0]);
+}
+

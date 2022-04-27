@@ -11,7 +11,7 @@
 #define GetCurrentDir getcwd
 #endif
 
-#include "../code/Empty.h"
+#include "../code/SongDict.h"
 
 using namespace std;
 
